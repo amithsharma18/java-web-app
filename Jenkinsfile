@@ -5,6 +5,14 @@ pipeline {
         maven 'maven'
     }
 
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/amithsharma18/java-web-app.git'
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean package'
@@ -21,6 +29,15 @@ pipeline {
             steps {
                 archiveArtifacts artifacts: 'target/*.war', fingerprint: true
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build SUCCESS'
+        }
+        failure {
+            echo 'Build FAILED'
         }
     }
 }
